@@ -44,12 +44,10 @@ export default function ButtonRipple() {
           {ripples.map((ripple) => (
             <motion.span
               key={ripple.id}
-              className="absolute bg-white rounded-full pointer-events-none"
+              className="absolute bg-white rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: ripple.x,
                 top: ripple.y,
-                width: 0,
-                height: 0,
               }}
               initial={{ width: 0, height: 0, opacity: 0.8 }}
               animate={{ width: 400, height: 400, opacity: 0 }}
@@ -60,7 +58,8 @@ export default function ButtonRipple() {
         </AnimatePresence>
       </button>
       <p className="text-neutral-400 text-sm max-w-md text-center">
-        Click the button to see a ripple effect that expands from the click point
+        Click the button to see a ripple effect that expands from the click
+        point
       </p>
     </div>
   );

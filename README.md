@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Microinteractions Playground
+
+A learning playground for experimenting with microinteractions using Next.js, TypeScript, Tailwind CSS, and Motion.
+
+## About
+
+This project is designed for learning and exploring microinteractions - those small, delightful animations and interface details that enhance user experience. The playground provides an easy way to create, test, and compare different microinteraction patterns.
+
+## Tech Stack
+
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type safety with strict mode enabled
+- **Tailwind CSS** - Utility-first CSS framework
+- **Motion** - Modern animation library for React
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone the repository
+git clone <your-repo-url>
+cd microinteractions
+
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000/playground](http://localhost:3000/playground) to see the playground.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+microinteractions/
+├── app/
+│   ├── playground/
+│   │   └── page.tsx           # Main playground interface
+│   ├── layout.tsx
+│   └── globals.css
+├── components/
+│   └── microinteractions/     # All microinteraction components
+│       ├── button-ripple.tsx
+│       └── magnetic-button.tsx
+├── lib/
+│   └── registry.ts            # Component registry
+└── README.md
+```
 
-## Learn More
+## Adding New Microinteractions
 
-To learn more about Next.js, take a look at the following resources:
+Creating a new microinteraction is simple and takes just a few steps:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 1. Create Your Component
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create a new file in `components/microinteractions/`:
 
-## Deploy on Vercel
+```tsx
+// components/microinteractions/my-interaction.tsx
+"use client";
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+import { motion } from "motion/react";
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+export default function MyInteraction() {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.1 }}
+      className="p-8 bg-blue-600 rounded-lg"
+    >
+      Hover me!
+    </motion.div>
+  );
+}
+```
+
+### 2. Register Your Component
+
+Add one line to `lib/registry.ts`:
+
+```tsx
+import MyInteraction from "@/components/microinteractions/my-interaction";
+
+export const registry: MicrointeractionEntry[] = [
+  // ... existing entries
+  {
+    name: "My Interaction",
+    slug: "my-interaction",
+    description: "A brief description of what this microinteraction does",
+    component: MyInteraction,
+  },
+];
+```
+
+### 3. See It in Action
+
+Your component will automatically appear in the playground dropdown. Select it to test and experiment!
+
+## Example Microinteractions
+
+### Button Ripple
+Click-triggered ripple effect that expands from the click point with smooth fade-out animation.
+
+**Key concepts:**
+- Multiple simultaneous animations
+- AnimatePresence for mount/unmount animations
+- Dynamic positioning based on user input
+
+### Magnetic Button
+Button that follows the cursor with spring physics when nearby.
+
+**Key concepts:**
+- useMotionValue for performance
+- useSpring for physics-based animation
+- Distance-based interaction zones
+
+## Tips for Learning
+
+1. **Start Simple** - Begin with basic hover states and transitions
+2. **Study the Examples** - The included examples demonstrate common patterns
+3. **Experiment Freely** - The playground makes it easy to iterate quickly
+4. **Read Motion Docs** - Familiarize yourself with Motion's API at [motion.dev](https://motion.dev)
+5. **Consider Performance** - Use `useMotionValue` for frequently updating values
+6. **Think About UX** - Microinteractions should enhance, not distract
+
+## Development
+
+```bash
+# Run development server
+pnpm dev
+
+# Build for production
+pnpm build
+
+# Start production server
+pnpm start
+
+# Lint code
+pnpm lint
+```
+
+## License
+
+MIT
+
+## Contributing
+
+Feel free to add your own microinteractions and share them! This is a learning project, so experimentation is encouraged.
