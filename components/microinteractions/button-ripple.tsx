@@ -37,7 +37,7 @@ export default function ButtonRipple() {
     <div className="flex flex-col items-center gap-8">
       <button
         onClick={handleClick}
-        className="relative overflow-hidden px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+        className="relative overflow-hidden cursor-pointer px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
       >
         <span className="relative z-10">Click me</span>
         <AnimatePresence>

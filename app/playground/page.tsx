@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { registry } from "@/lib/registry";
 
+const STORAGE_KEY = "microinteractions-selected-slug";
+
 export default function PlaygroundPage() {
-  const [selectedSlug, setSelectedSlug] = useState<string>(
-    registry[0]?.slug || ""
-  );
+  const [selectedSlug, setSelectedSlug] = useState<string>(registry[0]?.slug || "");
   const [showDescription, setShowDescription] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && registry.find((entry) => entry.slug === saved)) {
+      setSelectedSlug(saved);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, selectedSlug);
+  }, [selectedSlug]);
 
   const selectedEntry = registry.find((entry) => entry.slug === selectedSlug);
   const SelectedComponent = selectedEntry?.component;
