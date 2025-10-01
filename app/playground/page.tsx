@@ -26,11 +26,6 @@ export default function PlaygroundPage() {
   return (
     <div className="min-h-screen bg-neutral-950 text-white p-8">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-12">
-          <h1 className="text-4xl font-bold mb-2">Microinteractions Playground</h1>
-          <p className="text-neutral-400">Explore and experiment with microinteractions</p>
-        </header>
-
         <div className="mb-8 flex gap-4 items-center">
           <div className="flex-1">
             <label htmlFor="component-select" className="block text-sm font-medium mb-2">
@@ -71,7 +66,7 @@ export default function PlaygroundPage() {
           </div>
         )}
 
-        <div className="min-h-[600px] bg-neutral-900 border border-neutral-800 rounded-lg flex items-center justify-center p-8">
+        <div className="min-h-[600px] rounded-lg flex items-center justify-center p-8">
           {SelectedComponent ? (
             <SelectedComponent />
           ) : (

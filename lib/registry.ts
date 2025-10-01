@@ -3,6 +3,7 @@ import ButtonRipple from "@/components/microinteractions/button-ripple";
 import MagneticButton from "@/components/microinteractions/magnetic-button";
 import { StatefulButtonExample } from "@/components/microinteractions/stateful-button-example";
 import { ButtonToCard } from "@/components/microinteractions/button-to-card";
+import { TransactionList } from "@/components/microinteractions/transaction-list";
 
 export interface MicrointeractionEntry {
   name: string;
@@ -38,5 +39,12 @@ export const registry: MicrointeractionEntry[] = [
     slug: "button-to-card",
     description: "A button that when clicked, reveals a card with a fade-in animation.",
     component: ButtonToCard,
+  },
+  {
+    name: "Transaction List",
+    slug: "transaction-list",
+    description:
+      "An expandable transaction list with smooth layout animations. Click any transaction to reveal detailed information with animated separators and a modal overlay. Demonstrates coordinated layout animations using LayoutGroup and AnimatePresence.",
+    component: TransactionList,
   },
 ];
