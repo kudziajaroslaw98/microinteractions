@@ -11,7 +11,7 @@ export default function PlaygroundPage() {
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && registry.find((entry) => entry.slug === saved)) {
+    if (saved && registry.find(entry => entry.slug === saved)) {
       setSelectedSlug(saved);
     }
   }, []);
@@ -20,7 +20,7 @@ export default function PlaygroundPage() {
     localStorage.setItem(STORAGE_KEY, selectedSlug);
   }, [selectedSlug]);
 
-  const selectedEntry = registry.find((entry) => entry.slug === selectedSlug);
+  const selectedEntry = registry.find(entry => entry.slug === selectedSlug);
   const SelectedComponent = selectedEntry?.component;
 
   return (
@@ -28,9 +28,7 @@ export default function PlaygroundPage() {
       <div className="max-w-7xl mx-auto">
         <header className="mb-12">
           <h1 className="text-4xl font-bold mb-2">Microinteractions Playground</h1>
-          <p className="text-neutral-400">
-            Explore and experiment with microinteractions
-          </p>
+          <p className="text-neutral-400">Explore and experiment with microinteractions</p>
         </header>
 
         <div className="mb-8 flex gap-4 items-center">
@@ -41,13 +39,13 @@ export default function PlaygroundPage() {
             <select
               id="component-select"
               value={selectedSlug}
-              onChange={(e) => setSelectedSlug(e.target.value)}
+              onChange={e => setSelectedSlug(e.target.value)}
               className="w-full px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {registry.length === 0 ? (
                 <option value="">No components available</option>
               ) : (
-                registry.map((entry) => (
+                registry.map(entry => (
                   <option key={entry.slug} value={entry.slug}>
                     {entry.name}
                   </option>

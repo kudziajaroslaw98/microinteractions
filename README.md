@@ -70,10 +70,7 @@ import { motion } from "motion/react";
 
 export default function MyInteraction() {
   return (
-    <motion.div
-      whileHover={{ scale: 1.1 }}
-      className="p-8 bg-blue-600 rounded-lg"
-    >
+    <motion.div whileHover={{ scale: 1.1 }} className="p-8 bg-blue-600 rounded-lg">
       Hover me!
     </motion.div>
   );
@@ -105,17 +102,21 @@ Your component will automatically appear in the playground dropdown. Select it t
 ## Example Microinteractions
 
 ### Button Ripple
+
 Click-triggered ripple effect that expands from the click point with smooth fade-out animation.
 
 **Key concepts:**
+
 - Multiple simultaneous animations
 - AnimatePresence for mount/unmount animations
 - Dynamic positioning based on user input
 
 ### Magnetic Button
+
 Button that follows the cursor with spring physics when nearby.
 
 **Key concepts:**
+
 - useMotionValue for performance
 - useSpring for physics-based animation
 - Distance-based interaction zones

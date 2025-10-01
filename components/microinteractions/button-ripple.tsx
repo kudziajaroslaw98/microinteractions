@@ -25,11 +25,11 @@ export default function ButtonRipple() {
       y,
     };
 
-    setRipples((prev) => [...prev, newRipple]);
-    setNextId((prev) => prev + 1);
+    setRipples(prev => [...prev, newRipple]);
+    setNextId(prev => prev + 1);
 
     setTimeout(() => {
-      setRipples((prev) => prev.filter((ripple) => ripple.id !== newRipple.id));
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
     }, 600);
   };
 
@@ -41,7 +41,7 @@ export default function ButtonRipple() {
       >
         <span className="relative z-10">Click me</span>
         <AnimatePresence>
-          {ripples.map((ripple) => (
+          {ripples.map(ripple => (
             <motion.span
               key={ripple.id}
               className="absolute bg-white rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
@@ -58,8 +58,7 @@ export default function ButtonRipple() {
         </AnimatePresence>
       </button>
       <p className="text-neutral-400 text-sm max-w-md text-center">
-        Click the button to see a ripple effect that expands from the click
-        point
+        Click the button to see a ripple effect that expands from the click point
       </p>
     </div>
   );

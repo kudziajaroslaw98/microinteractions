@@ -1,83 +1,66 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useState } from "react";
-import { Check, Loader } from "lucide-react";
+import { type ReactNode } from "react";
 
-export function StatefulButton() {
-  const [activeState, setActiveState] = useState("default");
-  const [states, setStates] = useState([
-    "default",
-    "long_text",
-    "with_icon",
-    "icon only",
-  ]);
+interface StatefulButtonProps {
+  content: ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  stateKey?: string;
+  className?: string;
+  ariaLabel?: string;
+}
 
-  const handleClick = useCallback(() => {
-    if (activeState === "default") {
-      setActiveState("long_text");
-    } else if (activeState === "long_text") {
-      setActiveState("with_icon");
-    } else if (activeState === "with_icon") {
-      setActiveState("icon only");
-    } else if (activeState === "icon only") {
-      setActiveState("default");
-    }
-  }, [activeState]);
-
-  const getStateComponent = useCallback(() => {
-    switch (activeState) {
-      case "default":
-        return <span>Click me</span>;
-      case "long_text":
-        return <span>Clicked ddsadas dasdsa</span>;
-
-      case "with_icon":
-        return (
-          <span className="flex gap-2 items-center">
-            <Loader className="flex animate-spin size-5" />{" "}
-            <span> Loading...</span>
-          </span>
-        );
-      case "icon only":
-        return <Check className="flex size-6" />;
-      default:
-        return null;
-    }
-  }, [activeState]);
-
+export function StatefulButton({
+  content,
+  onClick,
+  disabled = false,
+  stateKey = "default",
+  className = "",
+  ariaLabel = "interactive button",
+}: StatefulButtonProps) {
   return (
     <motion.button
-      className="cursor-pointer relative items-center flex rounded-full px-6 py-2 overflow-hidden border-2 border-zinc-800 text-white will-change-transform"
-      layout
-      transition={{ type: "spring", duration: 0.4 }}
-      onClick={handleClick}
+      className={`
+               cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-200 ease-out
+               hover:ease-in active:ease-in ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      aria-disabled={disabled}
     >
-      <AnimatePresence mode="popLayout">
-        <motion.span
-          key={activeState}
-          className="z-20 flex-col will-change-[transform,filter]"
-          initial={{
-            y: -40,
-            opacity: 0,
-            zIndex: 20,
-          }}
-          animate={{
-            y: 0,
-            opacity: 1,
-            zIndex: 20,
-            transition: { duration: 0.2, ease: "easeIn" },
-          }}
-          exit={{
-            y: 15,
-            opacity: 0,
-            zIndex: 20,
-            filter: "blur(10px)",
-            transition: { duration: 0.1, ease: "easeOut" },
-            color: "#17171a",
-          }}
-        >
-          {getStateComponent()}
-        </motion.span>
-      </AnimatePresence>
+      <motion.div
+        layout
+        className="items-center relative justify-center flex rounded-full px-6 py-2 border-2
+                 overflow-hidden border-zinc-600 text-white will-change-transform whitespace-nowrap"
+        transition={{ type: "spring", duration: 0.3, bounce: 0.2 }}
+      >
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={stateKey}
+            className="z-20 flex items-center gap-2"
+            initial={{
+              y: -40,
+              opacity: 0,
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+              transition: { duration: 0.3, ease: "easeOut" },
+            }}
+            exit={{
+              y: 40,
+              opacity: 0,
+              color: "oklch(44.2% 0.017 285.786)",
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            }}
+          >
+            {content}
+          </motion.span>
+        </AnimatePresence>
+      </motion.div>
     </motion.button>
   );
 }

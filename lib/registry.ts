@@ -1,7 +1,8 @@
 import { ComponentType } from "react";
 import ButtonRipple from "@/components/microinteractions/button-ripple";
 import MagneticButton from "@/components/microinteractions/magnetic-button";
-import { StatefulButton } from "@/components/microinteractions/stateful-button";
+import { StatefulButtonExample } from "@/components/microinteractions/stateful-button-example";
+import { ButtonToCard } from "@/components/microinteractions/button-to-card";
 
 export interface MicrointeractionEntry {
   name: string;
@@ -14,19 +15,28 @@ export const registry: MicrointeractionEntry[] = [
   {
     name: "Button Ripple",
     slug: "button-ripple",
-    description: "A ripple effect that expands from the click point with smooth fade-out animation. Uses AnimatePresence for managing multiple simultaneous ripples.",
+    description:
+      "A ripple effect that expands from the click point with smooth fade-out animation. Uses AnimatePresence for managing multiple simultaneous ripples.",
     component: ButtonRipple,
   },
   {
     name: "Magnetic Button",
     slug: "magnetic-button",
-    description: "A button that follows the cursor with spring physics when the mouse is nearby. Demonstrates useMotionValue and useSpring for smooth, physics-based animations.",
+    description:
+      "A button that follows the cursor with spring physics when the mouse is nearby. Demonstrates useMotionValue and useSpring for smooth, physics-based animations.",
     component: MagneticButton,
   },
   {
     name: "Stateful Button",
     slug: "stateful-button",
-    description: "A button that changes its text when clicked. Demonstrates useState for managing state.",
-    component: StatefulButton,
+    description:
+      "Fully controlled animated buttons with multiple states. Parent components have complete control over content, timing, and state transitions. Includes examples for payment processing, delete confirmation, and save operations with error handling.",
+    component: StatefulButtonExample,
+  },
+  {
+    name: "Button to Card",
+    slug: "button-to-card",
+    description: "A button that when clicked, reveals a card with a fade-in animation.",
+    component: ButtonToCard,
   },
 ];
