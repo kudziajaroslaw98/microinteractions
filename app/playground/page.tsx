@@ -1,7 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { registry } from "@/lib/registry";
+import { ChevronDown } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "microinteractions-selected-slug";
 
@@ -24,29 +32,37 @@ export default function PlaygroundPage() {
   const SelectedComponent = selectedEntry?.component;
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex gap-4 items-center">
-          <div className="flex-1">
-            <label htmlFor="component-select" className="block text-sm font-medium mb-2">
-              Select Component
-            </label>
-            <select
-              id="component-select"
-              value={selectedSlug}
-              onChange={e => setSelectedSlug(e.target.value)}
-              className="w-full px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {registry.length === 0 ? (
-                <option value="">No components available</option>
-              ) : (
-                registry.map(entry => (
-                  <option key={entry.slug} value={entry.slug}>
-                    {entry.name}
-                  </option>
-                ))
-              )}
-            </select>
+    <div className="min-h-screen text-white p-8 relative" style={{ background: "#000000" }}>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E")`,
+          opacity: 1,
+        }}
+      />
+      <div className="max-w-7xl mx-auto relative items-center flex flex-col z-10">
+        <div className="flex gap-4 items-center">
+          <div>
+            <label className="block text-sm font-medium mb-2">Select Component</label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="w-xs px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-lg hover:bg-neutral-800 transition-colors flex items-center justify-between">
+                  <span>{selectedEntry?.name || "Select a component"}</span>
+                  <ChevronDown className="h-4 w-4 opacity-50" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
+                {registry.length === 0 ? (
+                  <DropdownMenuItem disabled>No components available</DropdownMenuItem>
+                ) : (
+                  registry.map(entry => (
+                    <DropdownMenuItem key={entry.slug} onClick={() => setSelectedSlug(entry.slug)}>
+                      {entry.name}
+                    </DropdownMenuItem>
+                  ))
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {selectedEntry && (
@@ -59,14 +75,21 @@ export default function PlaygroundPage() {
           )}
         </div>
 
-        {selectedEntry && showDescription && (
-          <div className="mb-8 p-4 bg-neutral-900 border border-neutral-800 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">{selectedEntry.name}</h3>
-            <p className="text-neutral-400">{selectedEntry.description}</p>
-          </div>
-        )}
+        <AnimatePresence mode="popLayout">
+          {selectedEntry && showDescription && (
+            <motion.div
+              className="mb-8 p-4 max-w-lg"
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -100, opacity: 0, height: 0 }}
+              transition={{ type: "spring", damping: 16, stiffness: 140 }}
+            >
+              <p className="text-neutral-500 text-sm">{selectedEntry.description}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <div className="min-h-[600px] rounded-lg flex items-center justify-center p-8">
+        <div className="min-h-[600px] w-xl rounded-lg flex items-center justify-center p-8">
           {SelectedComponent ? (
             <SelectedComponent />
           ) : (

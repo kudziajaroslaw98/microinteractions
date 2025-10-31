@@ -1,8 +1,8 @@
 "use client";
 
-import { RefObject, useRef, useState } from "react";
+import { Dumbbell, Fuel, Smartphone, Users, Wifi, X } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { Smartphone, Fuel, Dumbbell, Wifi, Users, X, Pin } from "lucide-react";
+import { RefObject, useRef, useState } from "react";
 
 interface Transaction {
   id: string;
@@ -112,27 +112,24 @@ export function TransactionList() {
   };
 
   return (
-    <div className="flex items-center justify-center h-[800px] w-full bg-black p-4">
+    <div className="flex items-center justify-center h-[800px] w-full p-4">
       <LayoutGroup>
-        <motion.div
-          layout
-          className="w-full max-w-md bg-gradient-to-b from-zinc-900 to-black rounded-3xl p-6 relative overflow-hidden"
-        >
-          {/* <AnimatePresence mode="popLayout">
+        <motion.div className="w-full max-w-md bg-gradient-to-b from-zinc-900 to-black rounded-3xl p-6 relative overflow-hidden">
+          <AnimatePresence mode="popLayout">
             {expandedId === null && (
               <motion.h1
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: -100 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -100 }}
+                transition={{ type: "spring", damping: 14, stiffness: 100 }}
                 className="text-white text-2xl font-bold mb-6 text-center"
               >
                 Transaction
               </motion.h1>
             )}
-          </AnimatePresence> */}
+          </AnimatePresence>
 
-          <motion.div layout>
+          <motion.div>
             <AnimatePresence mode="popLayout">
               {transactions.map((transaction, index) => {
                 const isExpanded = expandedId === transaction.id;
@@ -153,13 +150,13 @@ export function TransactionList() {
             </AnimatePresence>
           </motion.div>
 
-          {/* <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="popLayout">
             {expandedId === null && (
               <motion.button
-                initial={{ opacity: 0, y: -50 }}
+                initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -50 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: 100 }}
+                transition={{ type: "spring", damping: 14, stiffness: 100 }}
                 className="w-full mt-6 py-4 bg-gray-200 text-black font-semibold rounded-2xl flex items-center justify-center gap-2 "
               >
                 All Transaction
@@ -180,7 +177,7 @@ export function TransactionList() {
                 </svg>
               </motion.button>
             )}
-          </AnimatePresence> */}
+          </AnimatePresence>
         </motion.div>
       </LayoutGroup>
     </div>
@@ -209,6 +206,7 @@ function TransactionItem({
   return (
     <motion.div
       layout
+      layoutId={`${transaction.id}-container`}
       onClick={!isExpanded ? onExpand : undefined}
       className={`
         rounded-2xl relative
@@ -219,56 +217,69 @@ function TransactionItem({
         opacity: 1,
         y: 0,
         height: "auto",
+        transition: { type: "spring", damping: 14, stiffness: 100 },
       }}
       exit={{
         opacity: 0,
         y: direction * -200,
         height: 0,
+        transition: { type: "spring", damping: 14, stiffness: 100 },
       }}
       transition={{
-        layout: { type: "spring", damping: 25, stiffness: 300 },
-        opacity: { duration: 0.4 },
-        y: { type: "spring", damping: 20, stiffness: 150 },
+        layout: { type: "spring", damping: 14, stiffness: 100 },
+        opacity: { duration: 0.8 },
+        y: { type: "spring", damping: 14, stiffness: 100 },
       }}
     >
       {/* Main Content */}
-      <motion.div className="flex items-center gap-4 p-4 relative ">
+      <motion.div
+        layoutId={`${transaction.id}-main-content`}
+        className="flex items-center justify-between gap-4 p-4 relative "
+      >
         {/* Icon */}
         <motion.div
           layout
-          className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center"
+          className="w-12 h-12 bg-white flex items-center justify-center"
+          initial={{
+            borderRadius: isExpanded ? 16 : 999,
+          }}
+          animate={{
+            borderRadius: isExpanded ? 16 : 999,
+          }}
+          transition={{
+            type: "spring",
+            damping: 40,
+            stiffness: 400,
+          }}
         >
           <span className="text-black">{transaction.icon}</span>
         </motion.div>
 
         {/* Info */}
-        <motion.div className="flex-1 min-w-0">
-          <motion.h3 className="text-white font-semibold text-base">{transaction.title}</motion.h3>
-          <motion.p className="text-gray-400 text-sm">{transaction.subtitle}</motion.p>
-        </motion.div>
+        {!isExpanded && (
+          <motion.div layout layoutId={`${transaction.id}-info`} className="flex-1 min-w-0">
+            <motion.h3 className="text-white font-semibold text-base">
+              {transaction.title}
+            </motion.h3>
+            <motion.p className="text-gray-400 text-sm">{transaction.subtitle}</motion.p>
+          </motion.div>
+        )}
 
-        {/* Amount - Hidden when expanded */}
-        <AnimatePresence>
-          {!isExpanded && (
-            <motion.div
-              layout
-              className="flex flex-col items-end"
-              initial={{ opacity: 1, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.15 }}
-            >
-              <motion.span layout className="text-white font-semibold text-lg">
-                {transaction.amount}
-              </motion.span>
-              {transaction.frequency && (
-                <motion.span layout className="text-gray-400 text-sm">
-                  {transaction.frequency}
-                </motion.span>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {!isExpanded && (
+          <motion.div
+            layout
+            layoutId={`${transaction.id}-amount`}
+            className="flex flex-col items-end"
+            initial={{ opacity: 1, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ type: "spring", damping: 14, stiffness: 100 }}
+          >
+            <motion.span className="text-white font-semibold text-lg">
+              {transaction.amount}
+            </motion.span>
+          </motion.div>
+        )}
 
         {/* Close Button - Only visible when expanded */}
         <AnimatePresence mode="popLayout">
@@ -277,6 +288,7 @@ function TransactionItem({
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ type: "spring", damping: 14, stiffness: 100 }}
               onClick={e => {
                 e.stopPropagation();
                 onCollapse();
@@ -289,66 +301,100 @@ function TransactionItem({
         </AnimatePresence>
       </motion.div>
 
-      {/* Expanded Details */}
-      <AnimatePresence>
-        {isExpanded && (
+      {isExpanded && (
+        <motion.div layout layoutId={`${transaction.id}-expanded-content`} className="flex p-4">
+          <motion.div layout layoutId={`${transaction.id}-info`} className="flex-1 min-w-0">
+            <motion.h3
+              layout
+              layoutId={`${transaction.id}-title`}
+              className="text-white font-semibold text-base"
+            >
+              {transaction.title}
+            </motion.h3>
+            <motion.p
+              layout
+              layoutId={`${transaction.id}-subtitle`}
+              className="text-gray-400 text-sm"
+            >
+              {transaction.subtitle}
+            </motion.p>
+          </motion.div>
+
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{
-              delay: 0.1,
-              opacity: { duration: 0.2 },
-            }}
-            className="overflow-hidden"
+            layout
+            layoutId={`${transaction.id}-amount`}
+            className="flex flex-col items-end"
+            initial={{ opacity: 1, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ type: "spring", damping: 14, stiffness: 100 }}
           >
-            {/* Separator */}
+            <motion.span className="text-white font-semibold text-lg">
+              {transaction.amount}
+            </motion.span>
+            {transaction.frequency && (
+              <motion.span className="text-gray-400 text-sm">{transaction.frequency}</motion.span>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Expanded Details */}
+      {isExpanded && (
+        <motion.div
+          layout
+          layoutId={`${transaction.id}-expanded-details-content`}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          transition={{ type: "spring", damping: 14, stiffness: 100 }}
+          className="overflow-hidden"
+        >
+          {/* Separator */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            exit={{ scaleX: 0 }}
+            transition={{ type: "spring", damping: 14, stiffness: 100 }}
+            className="h-[1px] bg-gray-700 mx-4 origin-center"
+          />
+
+          {/* Transaction Details */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ type: "spring", damping: 14, stiffness: 100 }}
+            className="p-4 pt-6 space-y-2"
+          >
+            <div className="flex flex-col items-start">
+              <p className="text-gray-400 text-sm">{transaction.details.transactionId}</p>
+              <p className="text-gray-400 text-sm">{transaction.details.date}</p>
+              <p className="text-gray-400 text-sm">{transaction.details.time}</p>
+            </div>
+
+            {/* Another Separator */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ delay: 0.1, duration: 0.3 }}
-              className="h-[1px] bg-gray-700 mx-4 origin-center"
+              exit={{ scaleX: 0 }}
+              transition={{ type: "spring", damping: 14, stiffness: 100 }}
+              className="h-[1px] bg-gray-700 origin-center !mt-4 !mb-4"
             />
 
-            {/* Transaction Details */}
+            {/* Payment Method */}
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.3 }}
-              className="p-4 pt-6 space-y-2"
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ type: "spring", damping: 14, stiffness: 100 }}
             >
-              <div className="flex items-start gap-3">
-                <Pin className="w-4 h-4 text-gray-400 mt-1" />
-                <div>
-                  <p className="text-gray-400 text-sm">{transaction.details.transactionId}</p>
-                  <p className="text-gray-400 text-sm">{transaction.details.date}</p>
-                  <p className="text-gray-400 text-sm">{transaction.details.time}</p>
-                </div>
-              </div>
-
-              {/* Another Separator */}
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.25, duration: 0.3 }}
-                className="h-[1px] bg-gray-700 origin-center !mt-4 !mb-4"
-              />
-
-              {/* Payment Method */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.3 }}
-              >
-                <p className="text-gray-400 text-sm">
-                  Paid via {transaction.details.paymentMethod}
-                </p>
-                <p className="text-gray-400 text-sm">Ref: {transaction.details.reference}</p>
-              </motion.div>
+              <p className="text-gray-400 text-sm">Paid via {transaction.details.paymentMethod}</p>
+              <p className="text-gray-400 text-sm">Ref: {transaction.details.reference}</p>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </motion.div>
+      )}
     </motion.div>
   );
 }
