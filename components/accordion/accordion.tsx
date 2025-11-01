@@ -89,13 +89,9 @@ export const Accordion = () => {
                 )
               }
               className={cn(
-                "p-3 border border-zinc-600 first:rounded-t-lg last:rounded-b-lg w-[500px]",
+                "p-3 border border-zinc-600 first:rounded-t-lg last:rounded-b-lg w-[500px] cursor-pointer",
               )}
               animate={{
-                borderTop:
-                  previousOpen || currentOpen || index === 0
-                    ? "1px solid #52525c"
-                    : "0px solid transparent",
                 borderTopLeftRadius:
                   previousOpen || currentOpen ? "0.5rem" : index === 0 ? "0.5rem" : "0rem",
                 borderTopRightRadius:
@@ -116,8 +112,9 @@ export const Accordion = () => {
                 marginTop: currentOpen ? "0.5rem" : "0rem",
                 marginBottom: currentOpen ? "0.5rem" : "0rem",
                 transition: {
-                  duration: 0.35,
-                  ease: "circInOut",
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 18,
                 },
               }}
             >
@@ -144,11 +141,11 @@ export const Accordion = () => {
                       y: 0,
                       opacity: 1,
                       transition: {
-                        height: { type: "spring", stiffness: 200, damping: 30 },
-                        filter: { duration: 0.45, ease: "easeIn" },
-                        opacity: { duration: 0.45, ease: "easeOut" },
-                        y: { type: "spring", stiffness: 200, damping: 30 },
-                      }
+                        height: { type: "spring", stiffness: 200, damping: 16, bounce: 1 },
+                        filter: { duration: 0.3, ease: "easeIn" },
+                        opacity: { duration: 0.35, ease: "easeOut" },
+                        y: { type: "spring", stiffness: 200, damping: 20 },
+                      },
                     }}
                     exit={{
                       height: 0,
@@ -156,11 +153,11 @@ export const Accordion = () => {
                       y: 10,
                       opacity: 0,
                       transition: {
-                        height: { type: "spring", stiffness: 200, damping: 30 },
+                        height: { type: "spring", stiffness: 300, damping: 25 },
                         filter: { duration: 0.45, ease: "easeOut" },
-                        opacity: { duration: 0.45, ease: "easeIn" },
-                        y: { type: "spring", stiffness: 200, damping: 30 },
-                      }
+                        opacity: { duration: 0.35, ease: "easeIn" },
+                        y: { type: "spring", stiffness: 300, damping: 25 },
+                      },
                     }}
                     className="overflow-hidden"
                   >
