@@ -1,3 +1,4 @@
+import { Accordion } from "@/components/accordion/accordion";
 import ButtonRipple from "@/components/microinteractions/button-ripple";
 import { ButtonToCard } from "@/components/microinteractions/button-to-card";
 import { IconToSelectButton } from "@/components/microinteractions/icon-to-select-button";
@@ -53,5 +54,12 @@ export const registry: MicrointeractionEntry[] = [
     slug: "icon-to-select-button",
     description: "A button that when clicked, reveals a select button with a fade-in animation.",
     component: IconToSelectButton,
+  },
+  {
+    name: "Accordion",
+    slug: "accordion",
+    description:
+      "An FAQ accordion with rotating chevron icons and smooth animations. Features dynamic border radius transitions, blur effects on content reveal, and lucide-react icons. Click any question to expand the answer with coordinated layout animations.",
+    component: Accordion,
   },
 ];

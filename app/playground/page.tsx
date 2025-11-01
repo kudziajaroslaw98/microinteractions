@@ -1,28 +1,23 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ComponentSelector } from "@/components/playground/component-selector";
 import { registry } from "@/lib/registry";
-import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "microinteractions-selected-slug";
 
 export default function PlaygroundPage() {
-  const [selectedSlug, setSelectedSlug] = useState<string>(registry[0]?.slug || "");
-  const [showDescription, setShowDescription] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && registry.find(entry => entry.slug === saved)) {
-      setSelectedSlug(saved);
+  const [selectedSlug, setSelectedSlug] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && registry.find(entry => entry.slug === saved)) {
+        return saved;
+      }
     }
-  }, []);
+    return registry[0]?.slug || "";
+  });
+  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, selectedSlug);
@@ -42,28 +37,11 @@ export default function PlaygroundPage() {
       />
       <div className="max-w-7xl mx-auto relative items-center flex flex-col z-10">
         <div className="flex gap-4 items-center">
-          <div>
-            <label className="block text-sm font-medium mb-2">Select Component</label>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="w-xs px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-lg hover:bg-neutral-800 transition-colors flex items-center justify-between">
-                  <span>{selectedEntry?.name || "Select a component"}</span>
-                  <ChevronDown className="h-4 w-4 opacity-50" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
-                {registry.length === 0 ? (
-                  <DropdownMenuItem disabled>No components available</DropdownMenuItem>
-                ) : (
-                  registry.map(entry => (
-                    <DropdownMenuItem key={entry.slug} onClick={() => setSelectedSlug(entry.slug)}>
-                      {entry.name}
-                    </DropdownMenuItem>
-                  ))
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <ComponentSelector
+            registry={registry}
+            selectedSlug={selectedSlug}
+            onSelectSlug={setSelectedSlug}
+          />
 
           {selectedEntry && (
             <button

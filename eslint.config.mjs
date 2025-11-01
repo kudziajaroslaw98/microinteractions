@@ -1,20 +1,12 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import nextConfig from "eslint-config-next";
+import prettierConfig from "eslint-config-prettier";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const config = [
+  // Next.js rules (direct import for ESLint 9 compatibility)
+  ...(Array.isArray(nextConfig) ? nextConfig : [nextConfig]),
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-export default [
-  // Next.js and TypeScript rules
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-
-  // Prettier integration - this runs prettier as an ESLint rule
-  ...compat.extends("plugin:prettier/recommended"),
+  // Prettier config to disable conflicting ESLint rules
+  prettierConfig,
 
   // Custom configuration
   {
@@ -28,8 +20,6 @@ export default [
         },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
-      // Prettier formatting as warning instead of error
-      "prettier/prettier": "warn",
     },
   },
 
@@ -46,3 +36,5 @@ export default [
     ],
   },
 ];
+
+export default config;
