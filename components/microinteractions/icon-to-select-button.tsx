@@ -18,11 +18,17 @@ export const IconToSelectButton = () => {
       tabIndex={0}
       aria-expanded={open}
     >
-      <Globe className="size-5 flex items-center justify-center " />
+      <Globe
+        className={cn(
+          "size-5 flex items-center justify-center transition-colors duration-300 ease-out",
+          open ? "text-white" : "text-gray-600",
+        )}
+      />
       <MotionConfig
         transition={{
-          ease: "easeOut",
-          duration: 0.3,
+          type: "spring",
+          stiffness: 225,
+          damping: 18,
         }}
       >
         <AnimatePresence>

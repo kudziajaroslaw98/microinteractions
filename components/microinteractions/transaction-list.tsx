@@ -121,7 +121,7 @@ export function TransactionList() {
                 initial={{ opacity: 0, y: -100 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -100 }}
-                transition={{ type: "spring", damping: 14, stiffness: 100 }}
+                transition={{ type: "spring", damping: 20, stiffness: 160 }}
                 className="text-white text-2xl font-bold mb-6 text-center"
               >
                 Transaction
@@ -156,7 +156,7 @@ export function TransactionList() {
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 100 }}
-                transition={{ type: "spring", damping: 14, stiffness: 100 }}
+                transition={{ type: "spring", damping: 20, stiffness: 160 }}
                 className="w-full mt-6 py-4 bg-gray-200 text-black font-semibold rounded-2xl flex items-center justify-center gap-2 "
               >
                 All Transaction
@@ -205,7 +205,6 @@ function TransactionItem({
   const direction = index > expandedIndex.current ? -1 : 1;
   return (
     <motion.div
-      layout
       layoutId={`${transaction.id}-container`}
       onClick={!isExpanded ? onExpand : undefined}
       className={`
@@ -217,39 +216,40 @@ function TransactionItem({
         opacity: 1,
         y: 0,
         height: "auto",
-        transition: { type: "spring", damping: 14, stiffness: 100 },
+        transition: { type: "spring", damping: 20, stiffness: 160 },
       }}
       exit={{
         opacity: 0,
         y: direction * -200,
         height: 0,
-        transition: { type: "spring", damping: 14, stiffness: 100 },
+        transition: { type: "spring", damping: 20, stiffness: 160 },
       }}
       transition={{
-        layout: { type: "spring", damping: 14, stiffness: 100 },
+        layout: { type: "spring", damping: 20, stiffness: 160 },
         opacity: { duration: 0.8 },
-        y: { type: "spring", damping: 14, stiffness: 100 },
+        y: { type: "spring", damping: 20, stiffness: 160 },
       }}
     >
       {/* Main Content */}
       <motion.div
         layoutId={`${transaction.id}-main-content`}
-        className="flex items-center justify-between gap-4 p-4 relative "
+        className="flex items-center justify-between gap-4 p-4 relative"
       >
         {/* Icon */}
         <motion.div
-          layout
           className="w-12 h-12 bg-white flex items-center justify-center"
-          initial={{
-            borderRadius: isExpanded ? 16 : 999,
+          variants={{
+            expanded: {
+              borderRadius: 16,
+            },
+            collapsed: {
+              borderRadius: 999,
+            },
           }}
-          animate={{
-            borderRadius: isExpanded ? 16 : 999,
-          }}
+          animate={isExpanded ? "expanded" : "collapsed"}
           transition={{
-            type: "spring",
-            damping: 40,
-            stiffness: 400,
+            ease: "easeOut",
+            duration: 0.25,
           }}
         >
           <span className="text-black">{transaction.icon}</span>
@@ -257,7 +257,7 @@ function TransactionItem({
 
         {/* Info */}
         {!isExpanded && (
-          <motion.div layout layoutId={`${transaction.id}-info`} className="flex-1 min-w-0">
+          <motion.div layoutId={`${transaction.id}-info`} className="flex-1 min-w-0">
             <motion.h3 className="text-white font-semibold text-base">
               {transaction.title}
             </motion.h3>
@@ -267,13 +267,12 @@ function TransactionItem({
 
         {!isExpanded && (
           <motion.div
-            layout
             layoutId={`${transaction.id}-amount`}
             className="flex flex-col items-end"
             initial={{ opacity: 1, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ type: "spring", damping: 14, stiffness: 100 }}
+            transition={{ type: "spring", damping: 20, stiffness: 160 }}
           >
             <motion.span className="text-white font-semibold text-lg">
               {transaction.amount}
@@ -288,7 +287,7 @@ function TransactionItem({
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ type: "spring", damping: 14, stiffness: 100 }}
+              transition={{ type: "spring", damping: 20, stiffness: 160 }}
               onClick={e => {
                 e.stopPropagation();
                 onCollapse();
@@ -302,32 +301,26 @@ function TransactionItem({
       </motion.div>
 
       {isExpanded && (
-        <motion.div layout layoutId={`${transaction.id}-expanded-content`} className="flex p-4">
-          <motion.div layout layoutId={`${transaction.id}-info`} className="flex-1 min-w-0">
+        <motion.div layoutId={`${transaction.id}-expanded-content`} className="flex p-4">
+          <motion.div layoutId={`${transaction.id}-info`} className="flex-1 min-w-0">
             <motion.h3
-              layout
               layoutId={`${transaction.id}-title`}
               className="text-white font-semibold text-base"
             >
               {transaction.title}
             </motion.h3>
-            <motion.p
-              layout
-              layoutId={`${transaction.id}-subtitle`}
-              className="text-gray-400 text-sm"
-            >
+            <motion.p layoutId={`${transaction.id}-subtitle`} className="text-gray-400 text-sm">
               {transaction.subtitle}
             </motion.p>
           </motion.div>
 
           <motion.div
-            layout
             layoutId={`${transaction.id}-amount`}
             className="flex flex-col items-end"
             initial={{ opacity: 1, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ type: "spring", damping: 14, stiffness: 100 }}
+            transition={{ type: "spring", damping: 20, stiffness: 160 }}
           >
             <motion.span className="text-white font-semibold text-lg">
               {transaction.amount}
@@ -342,12 +335,11 @@ function TransactionItem({
       {/* Expanded Details */}
       {isExpanded && (
         <motion.div
-          layout
           layoutId={`${transaction.id}-expanded-details-content`}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
-          transition={{ type: "spring", damping: 14, stiffness: 100 }}
+          transition={{ type: "spring", damping: 20, stiffness: 160 }}
           className="overflow-hidden"
         >
           {/* Separator */}
@@ -355,7 +347,7 @@ function TransactionItem({
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             exit={{ scaleX: 0 }}
-            transition={{ type: "spring", damping: 14, stiffness: 100 }}
+            transition={{ type: "spring", damping: 20, stiffness: 160 }}
             className="h-[1px] bg-gray-700 mx-4 origin-center"
           />
 
@@ -364,7 +356,7 @@ function TransactionItem({
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
-            transition={{ type: "spring", damping: 14, stiffness: 100 }}
+            transition={{ type: "spring", damping: 20, stiffness: 160 }}
             className="p-4 pt-6 space-y-2"
           >
             <div className="flex flex-col items-start">
@@ -378,7 +370,7 @@ function TransactionItem({
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               exit={{ scaleX: 0 }}
-              transition={{ type: "spring", damping: 14, stiffness: 100 }}
+              transition={{ type: "spring", damping: 20, stiffness: 160 }}
               className="h-[1px] bg-gray-700 origin-center !mt-4 !mb-4"
             />
 
@@ -387,7 +379,7 @@ function TransactionItem({
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 40 }}
-              transition={{ type: "spring", damping: 14, stiffness: 100 }}
+              transition={{ type: "spring", damping: 20, stiffness: 160 }}
             >
               <p className="text-gray-400 text-sm">Paid via {transaction.details.paymentMethod}</p>
               <p className="text-gray-400 text-sm">Ref: {transaction.details.reference}</p>
